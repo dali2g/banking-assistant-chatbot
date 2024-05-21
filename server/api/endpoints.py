@@ -2,12 +2,18 @@ from fastapi import HTTPException, Header, Request, Response
 from fastapi.responses import JSONResponse
 from fastapi import APIRouter
 import httpx
-from .constants import BANKING_API_URL
 from .chat import get_response
 from .models import LoginRequest
 from .chatcf.functions import extract_id_from_jwt
 from pymongo import MongoClient
 import jwt
+from dotenv import load_dotenv
+import os
+load_dotenv()
+
+BANKING_API_URL = os.getenv("BANKING_API_URL")
+
+
 router = APIRouter()
 
 

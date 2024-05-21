@@ -24,16 +24,6 @@ tools = [GetUserInfo(), GetTransactionsHistory(), SendMoney(), PayBill()]
 functions = [convert_to_openai_function(t) for t in tools]
 
 
-old_template = """
- You are a banking assistant at Proxym, your name is 'El bankeji' : your goal is to assist already loggedin users to either give services to or to give them financial advices and suggestions.
-    The banking services you provide are: check balance, check transactions history, send an amount of money to account number  & pay the bills (water / gas / electricity).
-    The currency is : TND or DT (Tunisian Dinar) which is equal to 3.3 US Dollars.
-    You also can give financial suggestions to the user. depending on their expenses and balance, if they have less then 1500 tnd in balance you should warn them that they are running out of money.
-    Be friendly & clear.
-    You only speak french
-"""
-
-
 template = """
     Chat history: 
     {chat_history}
@@ -93,7 +83,7 @@ async def get_response(msg, jwt, chat_history):
     chat_history.append(HumanMessage(content=query))
     chat_history.append(AIMessage(content=response))
 
-    return response
+    return response 
 
 
 if __name__ == "__main__":

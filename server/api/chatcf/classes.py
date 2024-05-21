@@ -10,7 +10,14 @@ from .functions import extract_id_from_jwt
 from typing import Optional
 from typing import Dict, Any
 from pydantic import ValidationError
-from ..constants import BANKING_API_URL, ProviderHolder
+from ..provider import ProviderHolder
+from dotenv import load_dotenv
+import os
+load_dotenv()
+
+BANKING_API_URL = os.getenv("BANKING_API_URL")
+
+
 
 
 class SendMoneyArguments(BaseModel):
@@ -65,19 +72,7 @@ class GetTransactionsHistory(BaseTool):
     description = "Tool to get the user's transaction history (transfers & bill payments) (JWT)"
 
     def _run(self,  jwt: str, query: str, run_manager: Optional[CallbackManagerForToolRun] = None) -> dict:
-        bills_url = f"{BANKING_API_URL}/transfer/transferhistory"
-        transfers_url = f"{BANKING_API_URL}/bill/billhistory"
-
-        headers = set_headers(jwt)
-
-        bills_history = requests.get(bills_url, headers=headers)
-        transfers_history = requests.get(transfers_url, headers=headers)
-
-        bills_data = bills_history.json()
-        transfers_data = transfers_history.json()
-
-        merged_data = bills_data + transfers_data
-        return merged_data
+       return ProviderHolder.getProvider().getTransctionHistory(jwt)
 
     async def _arun(
         self,  run_manager: Optional[AsyncCallbackManagerForToolRun] = None
@@ -96,13 +91,8 @@ class SendMoney(BaseTool):
         self,  jwt: str, amount: float, receiver_id: int, run_manager: Optional[CallbackManagerForToolRun] = None
     ) -> dict:
         """Synchronous method to send money."""
-        url = f"{BANKING_API_URL}/transfer/transfer"
-        headers = set_headers(jwt)
-
-        data = send_money_to_json(amount, receiver_id)
-        response = requests.post(url, headers=headers, json=data)
-        print(response.status_code)
-        return response.json()
+        return ProviderHolder.getProvider().sendMoney(jwt , amount, receiver_id)
+ 
 
     async def _arun(
         self,  run_manager: Optional[AsyncCallbackManagerForToolRun] = None
@@ -120,13 +110,7 @@ class PayBill(BaseTool):
         self, jwt: str, bill_type: str, run_manager: Optional[CallbackManagerForToolRun] = None
     ) -> dict:
         """Synchronous method to send money."""
-        url = f"{BANKING_API_URL}/bill/pay"
-        headers = set_headers(jwt)
-
-        data = bill_type_to_json(bill_type)
-
-        response = requests.post(url, headers=headers, json=data)
-        return response.json()
+        return ProviderHolder.getProvider().payBill(jwt , bill_type)
 
     async def _arun(
         self,  run_manager: Optional[AsyncCallbackManagerForToolRun] = None
