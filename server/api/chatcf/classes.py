@@ -10,7 +10,7 @@ from .functions import extract_id_from_jwt
 from typing import Optional
 from typing import Dict, Any
 from pydantic import ValidationError
-from ..constants import BANKING_API_URL
+from ..constants import BANKING_API_URL, ProviderHolder
 
 
 class SendMoneyArguments(BaseModel):
@@ -50,28 +50,7 @@ class GetUserInfo(BaseTool):
     description = "Tool to get the user's id, username/name, email & current balance/amount of money in his account(JWT)"
 
     def _run(self, jwt: str, query: str, run_manager: Optional[CallbackManagerForToolRun] = None) -> dict:
-
-        userId = extract_id_from_jwt(jwt)
-
-        balance_url = f"{BANKING_API_URL}/balance"
-        user_url = f"{BANKING_API_URL}/users/{userId}"
-        accountDetails_url = f"{BANKING_API_URL}/accounts"
-
-        headers = set_headers(jwt)
-
-        balance_info = requests.get(balance_url, headers=headers)
-        user_info = requests.get(user_url, headers=headers)
-        account_info = requests.get(accountDetails_url, headers=headers)
-
-        # extract json data from all responses
-        balance_data = balance_info.json()
-        user_data = user_info.json()
-        account_data = account_info.json()
-
-        # Merge the dictionaries
-        merged_data = {**user_data, **account_data, **balance_data}
-
-        return merged_data
+        return ProviderHolder.getProvider().getUserInfo(jwt)
 
     async def _arun(
         self,  run_manager: Optional[AsyncCallbackManagerForToolRun] = None

@@ -68,7 +68,12 @@ async def generate(request: Request, response: Response, authorization: str = He
 
         query = body.get("message")
         print("Body message from client: ", query)
-        res = await get_response(query, token, chat_history)
+        try:
+            res = await get_response(query, token, chat_history)
+        except Exception as e:
+            raise HTTPException(
+                status_code=500, detail=f"Error while generating response: {e}")
+
         print("Bot response: ", res)
         # Store chat history in MongoDB
 
