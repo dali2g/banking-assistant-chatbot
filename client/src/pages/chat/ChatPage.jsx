@@ -1,13 +1,14 @@
 import React, { useState } from "react";
 import { Hero, Chatbox } from "./components/index";
 import { useAuth } from "../../context/AuthContext";
+import { useTheme } from "../../hooks/ThemeProvider";
 
 const ChatPage = () => {
   const { generate } = useAuth();
   const [isTyping, setIsTyping] = useState(false);
   const [message, setMessage] = useState("");
   const [messages, setMessages] = useState([]);
-
+  const { isDarkMode } = useTheme();
   const handleSuggestionClick = async (suggestion) => {
     const newMessage = {
       text: suggestion,
