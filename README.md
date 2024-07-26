@@ -9,8 +9,8 @@ A chatbot powered by LangChain and GPT-3.5.
 A middleware server using FastAPI to handle requests and forward data to the client side.
 A frontend built with ReactJS and TailwindCSS.
 Features
-User Authentication: Ensures secure access to the API endpoints.
-Banking Operations: Transfer money, check balances, view transaction history, and pay bills.
-Chatbot Integration: Utilizes LangChain and GPT-3.5 to provide intelligent responses and handle user prompts.
+User Authentication: Ensures secure access the chatbot and to the API endpoints.<br/>
+Banking Operations: Transfer money, check balances, view transaction history, and pay bills.<br/>
+Chatbot Integration: Utilizes LangChain and GPT-3.5 to provide intelligent responses and handle user prompts.<br/>
 Extensibility: Abstract class provider in LangChain allows for easy integration of additional banking systems in the future.
 </p>
