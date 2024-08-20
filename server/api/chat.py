@@ -87,7 +87,7 @@ async def get_response(msg, jwt, chat_history):
 
 
 if __name__ == "__main__":
-    jwt = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiaWF0IjoxNzE0NDI3NTg0LCJleHAiOjE3MTQ1MTM5ODR9.Wo3BflfmepisBWUxFJu9NfNX0lV46DbgqBKEMdts638"
+    jwt = ""
     chat_history = []
     print("Let's chat! (type 'quit' to exit)")
     while True:
